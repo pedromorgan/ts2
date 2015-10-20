@@ -177,6 +177,61 @@ class EditorWindow(QtWidgets.QMainWindow):
         statusBar = QtWidgets.QStatusBar()
         self.setStatusBar(statusBar)
 
+
+        from Qt import QtSvg
+        dock = QtWidgets.QDockWidget(self.tr("SVG"), self)
+        self.addDockWidget(Qt.RightDockWidgetArea, dock)
+
+        xwidget = widgets.VBoxWidget()
+        dock.setWidget(xwidget)
+
+        """
+        svgWidget = QtSvg.QSvgWidget()
+        xwidget.addWidget(svgWidget)
+        svgWidget.load("/home/ts2/ts2/images/svg/uk_3.svg")
+        """
+        tb = QtWidgets.QToolButton()
+        tb.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+        tb.setText("Signals")
+        tb.setPopupMode(QtWidgets.QToolButton.InstantPopup)
+
+        xico = QtGui.QIcon("/home/ts2/ts2/images/svg/uk_3.svg")
+        tb.setIcon(xico)
+        xwidget.addWidget(tb)
+        menu = QtWidgets.QMenu()
+        tb.setMenu(menu)
+        for x in [2, 3, 4]:
+            tbd = QtWidgets.QToolButton()
+            tbd.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+            tbd.setText("UK %s" % x)
+            xico = QtGui.QIcon("/home/ts2/ts2/images/svg/uk_%s.svg" % x)
+            tbd.setIcon(xico)
+            tbd.setIconSize(QtCore.QSize(48,48))
+            wa = QtWidgets.QWidgetAction(tb)
+            wa.setDefaultWidget(tbd)
+            menu.addAction(wa)
+
+        tb = QtWidgets.QToolButton()
+        tb.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+        tb.setText("Points")
+        tb.setPopupMode(QtWidgets.QToolButton.InstantPopup)
+
+        xico = QtGui.QIcon("/home/ts2/ts2/images/svg/point_1.svg")
+        tb.setIcon(xico)
+        xwidget.addWidget(tb)
+        menu = QtWidgets.QMenu()
+        tb.setMenu(menu)
+        for x in [1,2,3,4]:
+            tbd = QtWidgets.QToolButton()
+            tbd.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+            #tbd.setText("UK %s" % x)
+            xico = QtGui.QIcon("/home/ts2/ts2/images/svg/point_%s.svg" % x)
+            tbd.setIcon(xico)
+            tbd.setIconSize(QtCore.QSize(48,48))
+            wa = QtWidgets.QWidgetAction(tb)
+            wa.setDefaultWidget(tbd)
+            menu.addAction(wa)
+
         # Dock Widgets
         # >> TrackItems panel: TI Library
         self.toolsPanel = QtWidgets.QDockWidget(self.tr("Tools"), self)
@@ -185,6 +240,7 @@ class EditorWindow(QtWidgets.QMainWindow):
             QtWidgets.QDockWidget.DockWidgetMovable |
             QtWidgets.QDockWidget.DockWidgetFloatable
         )
+
         self.trackItemsLibraryView = QtWidgets.QGraphicsView(self)
         self.trackItemsLibraryView.setBackgroundBrush(QtGui.QBrush(Qt.black))
         self.trackItemsLibraryView.setInteractive(True)
@@ -560,7 +616,7 @@ class EditorWindow(QtWidgets.QMainWindow):
         self.trainsView.trainsUnselected.connect(self.editor.unselectTrains)
 
         if settings.debug:
-            self.tabWidget.setCurrentIndex(3)
+            self.tabWidget.setCurrentIndex(1)
         self.tabWidget.currentChanged.emit(self.tabWidget.currentIndex())
 
     def simulationDisconnect(self):
