@@ -48,7 +48,9 @@ class ZoomWidget(QtWidgets.QWidget):
     def __init__(self, parent=None):
         """Constructor for the ZoomWidget class."""
         super().__init__(parent)
-        self.button = QtWidgets.QPushButton(self.tr("100%"), self)
+        self.button = QtWidgets.QToolButton(self)
+        self.button.setText(self.tr("100%"))
+        self.button.setAutoRaise(True)
 
         self.slider = QtWidgets.QSlider(Qt.Horizontal, self)
         self.slider.setRange(10, 200)

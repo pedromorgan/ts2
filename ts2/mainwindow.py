@@ -307,17 +307,18 @@ class MainWindow(QtWidgets.QMainWindow):
         grid.setContentsMargins(0, 0, 0, 0)
         self.addDockWidget(Qt.RightDockWidgetArea, self.serviceInfoPanel)
 
+        # ============================
         # Stations + Places Info
-        self.placeInfoPanel = QtWidgets.QDockWidget(
+        self.placeInfoDock = QtWidgets.QDockWidget(
             self.tr("Station Information"), self
         )
-        self.placeInfoPanel.setObjectName("place_information")
-        self.placeInfoPanel.setFeatures(
+        self.placeInfoDock.setObjectName("place_information")
+        self.placeInfoDock.setFeatures(
             QtWidgets.QDockWidget.DockWidgetMovable |
             QtWidgets.QDockWidget.DockWidgetFloatable
         )
         wid = QtWidgets.QScrollArea()
-        self.placeInfoPanel.setWidget(wid)
+        self.placeInfoDock.setWidget(wid)
         hb = QtWidgets.QVBoxLayout()
         wid.setLayout(hb)
         self.lblPlaceInfoName = QtWidgets.QLabel()
@@ -331,11 +332,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.placeInfoView.setModel(placeitem.Place.selectedPlaceModel)
         hb.addWidget(self.placeInfoView)
 
+        ## save/restore columns
+        self.placeInfoView.setObjectName( self.objectName() + "_tree_1")
+        settings.restoreTree(self.placeInfoView)
+        self.placeInfoView.header().sectionResized.connect(self.onPlaceInfoViewSaveState)
+
+
         hb.setSpacing(0)
         hb.setContentsMargins(0, 0, 0, 0)
 
-        self.placeInfoPanel.setWidget(wid)
-        self.addDockWidget(Qt.RightDockWidgetArea, self.placeInfoPanel)
+        self.placeInfoDock.setWidget(wid)
+        self.addDockWidget(Qt.RightDockWidgetArea, self.placeInfoDock)
 
         # Trains
         self.trainListPanel = QtWidgets.QDockWidget(self.tr("Trains"), self)
@@ -749,3 +756,6 @@ class MainWindow(QtWidgets.QMainWindow):
     def openSettingsDialog(self):
         d = settingsdialog.SettingsDialog(self)
         d.exec_()
+
+    def onPlaceInfoViewSaveState(self):
+        settings.saveTree(self.placeInfoView)

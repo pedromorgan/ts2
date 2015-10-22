@@ -84,6 +84,16 @@ class XSettings(QtCore.QSettings):
         if v:
             window.restoreState(v)
 
+
+    def saveTree(self, tree):
+        self.setValue( "tree/%s" % tree.objectName(),  tree.header().saveState() )
+
+    def restoreTree(self, tree):
+        v = self.value("tree/%s" % tree.objectName() )
+        if v:
+            ok = tree.header().restoreState( v )
+            #print("restoreTree", v, ok)
+
     def setDebug(self, debug):
         """Set debug flag"""
         self._debug = debug
